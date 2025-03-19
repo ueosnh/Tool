@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Convert your photos to Ultra HD quality instantly with our free online tool. Enhance image resolution and quality effortlessly.">
+  <meta name="keywords" content="photo to ultra hd, image enhancer, photo resolution enhancer, free image converter, hd photo converter">
+  <meta name="author" content="Your Name or Company Name">
+  <meta property="og:title" content="Photo to Ultra HD Converter - Enhance Your Images Instantly">
+  <meta property="og:description" content="Convert your photos to Ultra HD quality instantly with our free online tool. Enhance image resolution and quality effortlessly.">
+  <meta property="og:image" content="https://yourwebsite.com/static/images/og-image.jpg">
+  <meta property="og:url" content="https://yourwebsite.com">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://yourwebsite.com">
+  <title>Photo to Ultra HD Converter - Enhance Your Images Instantly</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #fff;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+      margin: 20px;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 2.5rem;
+    }
+
+    p {
+      margin-bottom: 20px;
+      font-size: 1rem;
+      color: #e0e0e0;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    .file-upload {
+      display: inline-block;
+      background: #667eea;
+      color: #fff;
+      padding: 15px 30px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    .file-upload:hover {
+      background: #5a6fd1;
+    }
+
+    .file-upload i {
+      margin-right: 10px;
+    }
+
+    #photoInput {
+      display: none;
+    }
+
+    .convert-btn {
+      background: #4caf50;
+      color: #fff;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .convert-btn:hover {
+      background: #45a049;
+    }
+
+    .convert-btn i {
+      margin-right: 10px;
+    }
+
+    #result {
+      margin-top: 20px;
+    }
+
+    #outputImage {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      display: none; /* Hidden by default */
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      .file-upload, .convert-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Photo to Ultra HD Converter</h1>
+    <p>Upload your photo and convert it to Ultra HD quality instantly!</p>
+    <form id="uploadForm">
+      <label for="photoInput" class="file-upload">
+        <i class="fas fa-upload"></i>
+        <span id="fileText">Choose a Photo</span>
+      </label>
+      <input type="file" id="photoInput" accept="image/*" required>
+      <button type="submit" class="convert-btn">
+        <i class="fas fa-magic"></i>
+        Convert to Ultra HD
+      </button>
+    </form>
+    <div id="result">
+      <h2>Result:</h2>
+      <img id="outputImage" src="" alt="Enhanced Ultra HD Image">
+    </div>
+  </div>
+  <script>
+    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const fileInput = document.getElementById('photoInput');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert('Please select a photo.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await fetch('/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to process the image.');
+        }
+
+        const data = await response.json();
+        const outputImage = document.getElementById('outputImage');
+        outputImage.src = data.imageUrl;
+        outputImage.style.display = 'block'; // Show the image
+      } catch (error) {
+        console.error(error);
+        alert('An error occurred while processing the image.');
+      }
+    });
+
+    // Update file name when a file is selected
+    document.getElementById('photoInput').addEventListener('change', (e) => {
+      const fileText = document.getElementById('fileText');
+      if (e.target.files.length > 0) {
+        fileText.textContent = e.target.files[0].name;
+      } else {
+        fileText.textContent = 'Choose a Photo';
+      }
+    });
+  </script>
+</body>
+</html>
